@@ -7,7 +7,7 @@ def get_response(url):
     return json.loads(requests.get(url).text)
 
 
-CSV_RESULT = "star_wars.csv"
+CSV_FILE = "star_wars.csv"
 CSV_SIZE = 1
 
 def main():
@@ -51,12 +51,13 @@ def main():
             characters_data
         ))
     csv_content = f"{csv_title}\n{csv_rows}"
-    with open(CSV_RESULT, 'w') as handle:
+    with open(CSV_FILE, 'w') as handle:
         handle.write(csv_content)
 
     # 4. Send the CSV to httpbin.org
-    with open(CSV_RESULT, 'rb') as handle:
-        response = requests.post('http://httpbin.org/post', files={CSV_RESULT: handle})
+    with open(CSV_FILE, 'rb') as handle:
+        response = requests.post('http://httpbin.org/post', files={CSV_FILE: handle})
+    return json.loads(response.text)
 
 if __name__ == '__main__':
     main()
