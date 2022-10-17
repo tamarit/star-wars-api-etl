@@ -1,4 +1,3 @@
-from matplotlib.pyplot import title
 import requests
 import json
 from collections import Counter
@@ -6,6 +5,10 @@ from collections import Counter
 
 def get_response(url):
     return json.loads(requests.get(url).text)
+
+
+CSV_RESULT = "star_wars.csv"
+CSV_SIZE = 1
 
 def main():
 
@@ -16,7 +19,7 @@ def main():
         character_counter += Counter(film["characters"])
     characters_with_more_apperances = map(
             lambda tuple: tuple[0], 
-            character_counter.most_common(10)
+            character_counter.most_common(CSV_SIZE)
         )
     characters_data = []
     for character_url in characters_with_more_apperances:
@@ -48,7 +51,12 @@ def main():
             characters_data
         ))
     csv_content = f"{csv_title}\n{csv_rows}"
-    print(csv_content)
+    with open(CSV_RESULT, 'w') as handle:
+        handle.write(csv_content)
+
+    # 4. Send the CSV to httpbin.org
+    with open(CSV_RESULT, 'rb') as handle:
+        response = requests.post('http://httpbin.org/post', files={CSV_RESULT: handle})
 
 if __name__ == '__main__':
     main()
