@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 star_wars.csv
+test_retrieve_csv
