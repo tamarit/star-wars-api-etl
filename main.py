@@ -1,3 +1,4 @@
+from matplotlib.pyplot import title
 import requests
 import json
 from collections import Counter
@@ -38,10 +39,16 @@ def main():
             key=lambda tuple:int(tuple[2]), 
             reverse=True
         )
-    print(characters_data)
+    # print(characters_data)
 
     # 3. Produce a CSV with the following columns: name, species, height, appearances
-    
+    csv_title = "name,species,height,appearances"
+    csv_rows = "\n".join(map(
+            lambda tuple: ",".join(map(str, tuple)), 
+            characters_data
+        ))
+    csv_content = f"{csv_title}\n{csv_rows}"
+    print(csv_content)
 
 if __name__ == '__main__':
     main()
