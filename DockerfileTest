@@ -1,0 +1,13 @@
+# Using lightweight alpine image
+FROM python:3.10-alpine
+
+# Installing packages
+RUN apk update
+RUN apk add --no-cache bash
+
+# Defining working directory and adding source code
+WORKDIR /usr/src/app
+COPY . .
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["./bootstrap_test.sh"]
