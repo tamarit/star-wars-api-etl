@@ -3,14 +3,15 @@ import csv
 
 import main
 
+############################################################
+# COMMON DATA
+############################################################
+
+csv_content = list(csv.reader(StringIO(main.main()["files"][main.CSV_FILE])))
 
 ############################################################
 # TEST CASES
 ############################################################
-
-
-FINAL_RESPONSE = main.main()
-csv_content = list(csv.reader(StringIO(FINAL_RESPONSE["files"][main.CSV_FILE])))
 
 def test_csv_size():
     assert len(csv_content) == main.CSV_SIZE + 1

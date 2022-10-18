@@ -2,7 +2,7 @@ import requests
 import json
 from collections import Counter
 
-CSV_FILE = "star_wars.csv"
+CSV_FILE = "data/star_wars.csv"
 CSV_SIZE = 10
 
 def get_response(url):
@@ -13,17 +13,8 @@ def get_most_common_characters(size=None):
     all_films = get_response("https://swapi.dev/api/films/")["results"]
     for film in all_films:
         character_counter += Counter(film["characters"])
-    # characters_with_more_apperances = map(
-    #         lambda tuple: tuple[0], 
-    #         character_counter.most_common(size)
-    #     )
     return character_counter.most_common(size)
 
-
-# CURRENT TIME USED: ~ 1:30 hours
-# TODO
-# *docker
-# * instructions
 
 def main():
 
