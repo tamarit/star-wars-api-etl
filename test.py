@@ -10,13 +10,34 @@ import main
 
 
 FINAL_RESPONSE = main.main()
-reader_execution = list(csv.reader(StringIO(FINAL_RESPONSE["files"][main.CSV_FILE])))
+csv_content = list(csv.reader(StringIO(FINAL_RESPONSE["files"][main.CSV_FILE])))
 
 def test_csv_size():
-    assert len(list(reader_execution)) == main.CSV_SIZE + 1
+    assert len(csv_content) == main.CSV_SIZE + 1
 
 def test_csv_content():
     reader_local = []
     with open(main.CSV_FILE) as csvfile:
         reader_local += csv.reader(csvfile)
-    assert list(reader_execution) == list(reader_local)
+    assert csv_content == list(reader_local)
+
+def test_csv_order():
+    sorted_result = sorted(
+            csv_content[1:], 
+            key=lambda tuple: int(tuple[2]), 
+            reverse=True
+        )
+    assert csv_content[1:] == sorted_result
+
+def test_csv_most_common_in():
+    print(list(main.get_most_common_characters(size=main.CSV_SIZE)))
+    expected_appearecenes = list(map(
+            lambda tuple: tuple[1],
+            main.get_most_common_characters(size=main.CSV_SIZE)
+        ))
+    print(expected_appearecenes)
+    print(csv_content)
+    for row in csv_content[1:]:
+        if int(row[3]) in expected_appearecenes:
+            expected_appearecenes.remove(int(row[3]))
+    assert expected_appearecenes == []
