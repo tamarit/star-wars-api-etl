@@ -2,27 +2,34 @@ import requests
 import json
 from collections import Counter
 
+CSV_FILE = "star_wars.csv"
+CSV_SIZE = 10
 
 def get_response(url):
     return json.loads(requests.get(url).text)
 
-
-CSV_FILE = "star_wars.csv"
-CSV_SIZE = 1
-
-def main():
-
-    # 1. Find the ten characters who appear in the most Star Wars films
+def get_most_common_characters(size=None):
     character_counter = Counter()
     all_films = get_response("https://swapi.dev/api/films/")["results"]
     for film in all_films:
         character_counter += Counter(film["characters"])
-    characters_with_more_apperances = map(
-            lambda tuple: tuple[0], 
-            character_counter.most_common(CSV_SIZE)
-        )
+    # characters_with_more_apperances = map(
+    #         lambda tuple: tuple[0], 
+    #         character_counter.most_common(size)
+    #     )
+    return character_counter.most_common(size)
+
+
+# CURRENT TIME USED: ~ 1:30 hours
+# TODO
+# *docker
+# * instructions
+
+def main():
+
+    # 1. Find the ten characters who appear in the most Star Wars films
     characters_data = []
-    for character_url in characters_with_more_apperances:
+    for character_url, appearances in get_most_common_characters(size=CSV_SIZE):
         character_data = get_response(character_url)
         species_urls = character_data['species']
         species_list = []
@@ -30,11 +37,12 @@ def main():
             specie_data = get_response(specie_url)
             species_list.append(specie_data["name"])
         species_str = "-".join(species_list)
+        assert appearances == len(character_data['films'])
         characters_data.append((
                 character_data['name'], 
                 species_str, 
                 character_data['height'], 
-                len(character_data['films'])
+                appearances
             ))
 
     # 2. Sort those ten characters by height in descending order (i.e., tallest first)
