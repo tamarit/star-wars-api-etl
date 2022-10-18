@@ -26,9 +26,13 @@ docker run --name swae -v $PWD/data:/usr/src/app/data --rm swae
 
 ## Test
 
+We can run it directly using python, i.e. using the following command
+
 ```
 pytest test.py
 ```
+
+Or we can use docker.
 
 ### Build docker for testing
 
